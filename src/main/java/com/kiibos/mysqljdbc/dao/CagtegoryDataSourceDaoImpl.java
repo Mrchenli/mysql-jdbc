@@ -1,6 +1,6 @@
 package com.kiibos.mysqljdbc.dao;
 
-import com.kiibos.mysqljdbc.dao.drivermanager.BaseDao;
+import com.kiibos.mysqljdbc.dao.datasource.LxlDataSource;
 import com.kiibos.mysqljdbc.model.Category;
 
 import java.lang.reflect.Field;
@@ -15,8 +15,14 @@ import java.util.List;
  * @Author cl
  * @Date 2018/12/14 上午10:35
  **/
-public class CagtegoryDaoImpl extends BaseDao implements CategoryDao {
+public class CagtegoryDataSourceDaoImpl implements CategoryDao {
 
+    private final String URL = "jdbc:mysql://m1.kiibos.com:3316/pdc?useUnicode=true&characterEncoding=utf-8&useSSL=false";
+    private final String DRIVER = "com.mysql.jdbc.Driver";
+    private final String USER_NAME = "root";
+    private final String PWD = "example";
+
+    LxlDataSource lxlDataSource = new LxlDataSource(DRIVER,URL,PWD,USER_NAME,10);
 
     @Override
     public List<Category> queryCategory(int id) {
@@ -25,7 +31,7 @@ public class CagtegoryDaoImpl extends BaseDao implements CategoryDao {
         Statement statement =null;
         ResultSet resultSet =null;
         try {
-            connection = getConnection();
+            connection = lxlDataSource.getConnection();
             statement = connection.createStatement();
             String sql = "select * from category where id="+id;
             resultSet = statement.executeQuery(sql);
@@ -51,7 +57,7 @@ public class CagtegoryDaoImpl extends BaseDao implements CategoryDao {
         PreparedStatement statement =null;
         ResultSet resultSet =null;
         try {
-            connection = getConnection();
+            connection = lxlDataSource.getConnection();
             String sql = "select * from category where id=?";//可以防止sql注入
             statement = connection.prepareStatement(sql);
             statement.setInt(1,id);
@@ -77,9 +83,6 @@ public class CagtegoryDaoImpl extends BaseDao implements CategoryDao {
                     }
                     field.setAccessible(false);
                 }
-//                category.setId(resultSet.getInt("id"));
-//                category.setCategoryName(resultSet.getString("category_name"));
-//                category.setCreateTime(resultSet.getDate("create_time"));
                 categories.add(category);
             }
         }catch (Exception e){
@@ -90,21 +93,13 @@ public class CagtegoryDaoImpl extends BaseDao implements CategoryDao {
         return categories;
     }
 
-    public static void main(String[] args) {
-        Class clazz = Category.class;
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field field: fields){
-            System.out.println(field.getName());
-        }
-    }
-
 
     @Override
     public void delete(int id) {//jdbc事务机制
         Connection connection=null;
         PreparedStatement statement =null;
         try {
-            connection = getConnection();
+            connection = lxlDataSource.getConnection();
             connection.setAutoCommit(false);
             String sql = "delete from category where id =?";
             statement = connection.prepareStatement(sql);
@@ -123,5 +118,29 @@ public class CagtegoryDaoImpl extends BaseDao implements CategoryDao {
         }
     }
 
+
+
+    public void close(AutoCloseable closeable){
+        if(closeable!=null){
+            try {
+                closeable.close();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+            closeable = null;
+        }
+    }
+
+
+    public void close(Statement statement,Connection connection){
+        close(statement);
+        close(connection);
+    }
+
+    public void close(ResultSet resultSet, Statement statement, Connection connection){
+        close(resultSet);
+        close(statement);
+        close(connection);
+    }
 
 }

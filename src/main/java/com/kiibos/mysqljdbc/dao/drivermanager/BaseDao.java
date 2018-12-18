@@ -1,9 +1,10 @@
-package com.kiibos.mysqljdbc.dao;
+package com.kiibos.mysqljdbc.dao.drivermanager;
 
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  * @ClassName BaseDao

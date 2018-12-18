@@ -25,27 +25,27 @@ public class Category {
     /**
      * 产品品类父id
      */
-    private int parentId;
+    private int parent_id;
     /**
      * 创建人id
      */
-    private int creatorId;
+    private int creator_id;
     /**
      * 产品品类名称
      */
-    private String categoryName;
+    private String category_name;
     /**
      * 修改人id
      */
-    private int lastUpdatorId;
+    private int lastUpdator_id;
     /**
      * 创建时间
      */
-    private Date createTime;
+    private Date create_time;
     /**
      * 修改时间
      */
-    private Date updateTime;
+    private Date last_update_time;
     /**
      * 等级
      */
