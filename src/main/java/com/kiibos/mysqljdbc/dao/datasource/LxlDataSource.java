@@ -84,24 +84,32 @@ public class LxlDataSource extends AbstractDataSource {
     private int validationQueryTimeout = 1;
 
 
-    public LxlDataSource(String driverClassName, String url, String password, String username, int size) {
+
+    private static LxlDataSource lxlDataSource;
+
+    private LxlDataSource(String driverClassName, String url, String password, String username, int size) {
         this.driverClassName = driverClassName;
         this.url = url;
         this.password = password;
         this.username = username;
         this.size = size;
     }
-
-    public LxlDataSource(String driverClassName, String url, String password, String username, int size, boolean defaultAutoCommit, int defaultTransactionIsolation, String validationQuery, int validationQueryTimeout) {
-        this.driverClassName = driverClassName;
-        this.url = url;
-        this.password = password;
-        this.username = username;
-        this.size = size;
-        this.defaultAutoCommit = defaultAutoCommit;
-        this.defaultTransactionIsolation = defaultTransactionIsolation;
-        this.validationQuery = validationQuery;
-        this.validationQueryTimeout = validationQueryTimeout;
+    /**
+     * @Author kiibos
+     * @Description //双重校验锁的单利模式
+     * @Date 上午10:14 2018/12/19
+     * @param [driverClassName, url, password, username, size]
+     * @return com.kiibos.mysqljdbc.dao.datasource.LxlDataSource
+     **/
+    public static LxlDataSource getDataSource(String driverClassName, String url, String password, String username, int size){
+        if(lxlDataSource==null){
+            synchronized (LxlDataSource.class){
+                if(lxlDataSource==null){
+                    lxlDataSource = new LxlDataSource(driverClassName,url,password,username,size);
+                }
+            }
+        }
+        return lxlDataSource;
     }
 
     /**

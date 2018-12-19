@@ -22,7 +22,7 @@ public class CagtegoryDataSourceDaoImpl implements CategoryDao {
     private final String USER_NAME = "root";
     private final String PWD = "example";
 
-    LxlDataSource lxlDataSource = new LxlDataSource(DRIVER,URL,PWD,USER_NAME,10);
+    LxlDataSource lxlDataSource = LxlDataSource.getDataSource(DRIVER,URL,PWD,USER_NAME,10);
 
     @Override
     public List<Category> queryCategory(int id) {
