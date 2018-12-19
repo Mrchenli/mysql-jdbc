@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kiibos.mysqljdbc.dao.CategoryMapper">
+
+    <!--增加产品品类-->
+    <insert id="saveCategory" parameterType="com.kiibos.mysqljdbc.model.Category" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        category(creatorId,lastUpdatorId,categoryName,createTime, lastUpdateTime,parentId,level)
+      values (#{creatorId},#{lastUpdatorId},#{categoryName},#{createTime,jdbcType=DATE},#{updateTime,jdbcType=DATE},#{parentId},#{level})
+    </insert>
+    <!-- 查询Category   关键字不是用单引号  -->
+    <select id="queryCategory" resultType="com.kiibos.mysqljdbc.model.Category">
+        select * from category where id = #{id} and `delete` is not true
+    </select>
+
+   <!-- update-->
+    <update id="updateCategory" parameterType="com.kiibos.mysqljdbc.model.Category">
+        update category set categoryName =#{lastUpdatorId}
+    </update>
+
+    <!--delete-->
+    <update id="deleteCategory">
+        update category set delete= true
+    </update>
+
+    <select id="categoryList" resultType="com.kiibos.mysqljdbc.model.Category">
+        select  * from  category
+    </select>
+
+
+</mapper>

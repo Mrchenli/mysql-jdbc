@@ -1,8 +1,6 @@
 package com.kiibos.mysqljdbc.service;
 
-import com.kiibos.mysqljdbc.dao.CagtegoryDaoImpl;
-import com.kiibos.mysqljdbc.dao.CagtegoryDataSourceDaoImpl;
-import com.kiibos.mysqljdbc.dao.CategoryDao;
+import com.kiibos.mysqljdbc.dao.*;
 import com.kiibos.mysqljdbc.model.Category;
 
 /**
@@ -13,20 +11,22 @@ import com.kiibos.mysqljdbc.model.Category;
  **/
 public class CategoryServiceImpl implements CategoryService {
 
-    private CategoryDao categoryDao = new CagtegoryDataSourceDaoImpl();
+    //private CategoryDao categoryDao = new CagtegoryDataSourceDaoImpl();
 
+    private CategoryMapper categoryMapper = MapperUtil.getMapper(CategoryMapper.class);
 
     @Override
     public Category getCategory(Integer id) {
-        for (int i=0;i<=1024;i++){
-            categoryDao.queryPreparedCategory(id).get(0);
-        }
-        return categoryDao.queryPreparedCategory(id).get(0);
+//        for (int i=0;i<=1024;i++){
+//            categoryDao.queryPreparedCategory(id).get(0);
+//        }
+//        return categoryDao.queryPreparedCategory(id).get(0);
+        return categoryMapper.queryCategory(id);
     }
 
     @Override
     public void deleteCategory(Integer id) {
-        categoryDao.delete(id);
+        categoryMapper.deleteCategory(id);
     }
 
 }
