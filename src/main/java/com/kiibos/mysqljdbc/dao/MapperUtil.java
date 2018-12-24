@@ -26,6 +26,7 @@ public class MapperUtil {
     private static final String USER_NAME = "root";
     private static final String PWD = "example";
 
+
     /**
      * @Author kiibos
      * @Description todo  用的datasource是 PooledDataSource
